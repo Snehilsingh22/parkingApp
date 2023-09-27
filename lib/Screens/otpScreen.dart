@@ -133,27 +133,27 @@ class _OtpScreenState extends State<OtpScreen> {
                         Text(''),
                       ],
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 15),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       child: CustomButton(
                         text: "Verify",
                         onPressed: () {
-                          verifyOtp(context, otpCode!);
-                          // if (otpCode != null) {
-                          //   verifyOtp(context, otpCode!);
-                          // } else {
-                          // Fluttertoast.showToast(
-                          //   msg: "Login Failed",
-                          //   toastLength: Toast.LENGTH_SHORT,
-                          //   gravity: ToastGravity.BOTTOM,
-                          //   timeInSecForIosWeb: 1,
-                          //   backgroundColor: Colors.teal,
-                          //   textColor: Colors.white,
-                          //   fontSize: 16.0,
-                          // );
-                          // }
+                          verifyOtp(context, otpCode!, widget.myPhone);
+                          if (otpCode != null) {
+                            verifyOtp(context, otpCode!, widget.myPhone);
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Login Failed",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.amber,
+                              textColor: Colors.black,
+                              fontSize: 16.0,
+                            );
+                          }
                         },
                       ),
                     ),
@@ -168,7 +168,6 @@ class _OtpScreenState extends State<OtpScreen> {
                     // ),
                     // const SizedBox(height: 15),
                     // const TextButton(onPressed:, child: Text('Edit Phone Number'),
-
                     // ),
                     TextButton(
                         onPressed: () {
@@ -188,7 +187,7 @@ class _OtpScreenState extends State<OtpScreen> {
     ));
   }
 
-  void verifyOtp(BuildContext context, String userOtp) {
+  void verifyOtp(BuildContext context, String userOtp, String phoneNumber) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     ap.verifyOtp(
       context: context,
@@ -197,7 +196,7 @@ class _OtpScreenState extends State<OtpScreen> {
       onSuccess: () {
         // checking whether user exists in the db
 
-        ap.checkExistingUser().then(
+        ap.checkExistingUser(widget.myPhone).then(
           (value) async {
             if (value == true) {
               Fluttertoast.showToast(

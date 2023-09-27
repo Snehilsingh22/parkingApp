@@ -91,7 +91,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       "assets/Vehicle/32.png",
       "assets/Vehicle/33.png",
       "assets/Vehicle/34.png",
-      // "assets/Vehicle/35.png",
+      // "assets/Vehicle/35.png",//repeated image
       "assets/Vehicle/36.png",
       "assets/Vehicle/37.png",
       "assets/Vehicle/38.png",

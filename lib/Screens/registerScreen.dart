@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parkeasy/Models/usermodel.dart';
 import 'package:parkeasy/Providers/provider.dart';
 import 'package:parkeasy/Screens/homeScreen.dart';
+import 'package:parkeasy/Utils/utils.dart';
 import 'package:parkeasy/widgets/custombtn.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class UserInfromationScreen extends StatefulWidget {
 }
 
 class _UserInfromationScreenState extends State<UserInfromationScreen> {
-  File? image;
+  // File? image;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final bioController = TextEditingController();
@@ -139,7 +138,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                                     ),
                                   ), //icon of text field
                                   border: InputBorder.none,
-                                  hintText: "",
+                                  hintText: "Date of birth",
                                   alignLabelWithHint: true,
                                   //label text of field
                                 ),
@@ -151,7 +150,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime(1950),
                                       //DateTime.now() - not to allow to choose before today.
-                                      lastDate: DateTime(2100));
+                                      lastDate: DateTime.now());
 
                                   if (pickedDate != null) {
                                     print(
@@ -248,32 +247,28 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       dob: bioController.text.trim(),
-      profilePic: "",
-      // createdAt: "",
       phoneNumber: "",
-      //uid: "",
     );
-    // if (image != null) {
-    //   ap.saveUserDataToFirebase(
-    //     context: context,
-    //     userModel: userModel,
-    //     profilePic: image!,
-    //     onSuccess: () {
-    //       ap.saveUserDataToSP().then(
-    //             (value) => ap.setSignIn().then(
-    //                   (value) => Navigator.pushAndRemoveUntil(
-    //                       context,
-    //                       MaterialPageRoute(
-    //                         builder: (context) => const HomeScreen(),
-    //                       ),
-    //                       (route) => false),
-    //                 ),
-    //           );
-    //     },
-    //   );
-    // } else {
-    //   showSnackBar(context, "Please upload your profile photo");
-    // }
+    if (nameController != null) {
+      ap.saveUserDataToFirebase(
+        context: context,
+        userModel: userModel,
+        onSuccess: () {
+          ap.saveUserDataToSP().then(
+                (value) => ap.setSignIn().then(
+                      (value) => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false),
+                    ),
+              );
+        },
+      );
+    } else {
+      showSnackBar(context, "Please upload your profile photo");
+    }
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }

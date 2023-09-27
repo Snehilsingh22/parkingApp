@@ -1,13 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:parkeasy/Providers/provider.dart';
-import 'package:parkeasy/Screens/addUserScreen.dart';
 import 'package:parkeasy/Screens/addVehicleScreen.dart';
+import 'package:parkeasy/Screens/addVendorScreen.dart';
+import 'package:parkeasy/Screens/allVendorScreen.dart';
 import 'package:parkeasy/Screens/phoneNoScreen.dart';
+import 'package:parkeasy/Screens/priceScreen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -92,18 +95,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.amber),
+                                        backgroundColor: Colors.red),
                                     child: const Text(
                                       "Logout",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     onPressed: () {
                                       FirebaseAuth.instance.signOut();
-
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => LoginScreen(),
+                                            builder: (context) =>
+                                                const LoginScreen(),
                                           ));
                                     },
                                   )
@@ -170,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // ),
             // CustomButton(text: 'Add Vehicle', onPressed: () {}),
             // CustomButton(text: 'Add User', onPressed: () {})
-            Image(
+            const Image(
               image: AssetImage('assets/hi.gif'),
               height: 260,
               width: 260,
@@ -180,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AddVehicleScreen()));
+                          builder: (context) => const AddVehicleScreen()));
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -193,13 +196,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       MdiIcons.car,
                       color: Colors.black,
                     ),
-                    title: Text('Add vehicle'),
+                    title: const Text('Add Vehicle'),
                   ),
                 )),
             TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddUserScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddUserScreen()));
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -212,9 +217,85 @@ class _HomeScreenState extends State<HomeScreen> {
                       MdiIcons.account,
                       color: Colors.black,
                     ),
-                    title: Text('Add User'),
+                    title: const Text('Add Vendors'),
                   ),
-                ))
+                )),
+            const SizedBox(
+              height: 70,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PriceScreen()));
+                      },
+                      child: CircleAvatar(
+                        radius: 52,
+                        backgroundColor: Colors.black,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.amber,
+                          child: Center(
+                              child: Icon(
+                            MdiIcons.currencyRupee,
+                            color: Colors.black,
+                            size: 40,
+                          )),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AutoSizeText(
+                      'Current Pricing',
+                      style: TextStyle(fontSize: 17),
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const VendorScreen()));
+                      },
+                      child: CircleAvatar(
+                        radius: 52,
+                        backgroundColor: Colors.black,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.amber,
+                          child: Center(
+                              child: Icon(
+                            MdiIcons.account,
+                            color: Colors.black,
+                            size: 40,
+                          )),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AutoSizeText(
+                      'Vendors',
+                      style: TextStyle(fontSize: 17),
+                      maxLines: 1,
+                    )
+                  ],
+                )
+              ],
+            )
           ],
         ),
       )),

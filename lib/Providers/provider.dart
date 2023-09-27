@@ -97,9 +97,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       PhoneAuthCredential creds = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: userOtp);
-
       User? user = (await _firebaseAuth.signInWithCredential(creds)).user;
-
       if (user != null) {
         _uid = user.uid;
         onSuccess();
@@ -114,13 +112,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // DATABASE OPERTAIONS
-  Future<bool> checkExistingUser() async {
+  Future<bool> checkExistingUser(String _uid) async {
     DocumentSnapshot snapshot =
         await _firebaseFirestore.collection("users").doc(_uid).get();
     if (snapshot.exists) {
       print("USER EXISTS");
+      print("checking value is true");
       return true;
     } else {
+      print("checking value is true");
       print("NEW USER");
       return false;
     }
@@ -129,21 +129,19 @@ class AuthProvider extends ChangeNotifier {
   void saveUserDataToFirebase({
     required BuildContext context,
     required UserModel userModel,
-    required File profilePic,
     required Function onSuccess,
   }) async {
     _isLoading = true;
     notifyListeners();
     try {
       // uploading image to firebase storage.
-      await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
-        userModel.profilePic = value;
-        // userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
-        userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        // userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
-      });
+      // await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
+      //   userModel.profilePic = value;
+      // userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
+      userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+      // userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      // });
       _userModel = userModel;
-
       // uploading to database
       await _firebaseFirestore
           .collection("users")
