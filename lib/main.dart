@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parkeasy/Providers/provider.dart';
 import 'package:parkeasy/Screens/splashScreen.dart';
+import 'package:parkeasy/Utils/colors.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -23,11 +24,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            appBarTheme: AppBarTheme(
-          backgroundColor: Colors.amber, // 1
+            appBarTheme: const AppBarTheme(
+          backgroundColor: primaryColor, // 1
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         )),
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

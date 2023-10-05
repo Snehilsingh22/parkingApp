@@ -58,14 +58,14 @@ class _SplashScreenState extends State<SplashScreen> {
       home: Scaffold(
           body: Container(
         color: Colors.amber,
-        child: const Center(
+        child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
               image: AssetImage('assets/car.gif'),
-              height: 260,
-              width: 260,
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: MediaQuery.of(context).size.width * 0.7,
             ),
             SizedBox(
               height: 20,

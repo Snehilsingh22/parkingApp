@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:parkeasy/Models/usermodel.dart';
 import 'package:parkeasy/Providers/provider.dart';
 import 'package:parkeasy/Screens/homeScreen.dart';
+import 'package:parkeasy/Utils/colors.dart';
 import 'package:parkeasy/Utils/utils.dart';
 import 'package:parkeasy/widgets/custombtn.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
         child: isLoading == true
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.amber,
+                  color: primaryColor,
                 ),
               )
             : SingleChildScrollView(
@@ -88,8 +89,8 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                           children: [
                             Image(
                               image: AssetImage('assets/user.gif'),
-                              height: 200,
-                              width: 200,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: MediaQuery.of(context).size.height * 0.3,
                             ),
                             // name field
                             textFeld(
@@ -129,7 +130,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                                     margin: const EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: Colors.amber,
+                                      color: primaryColor,
                                     ),
                                     child: Icon(
                                       Icons.calendar_today,
@@ -156,8 +157,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                                     print(
                                         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                                     String formattedDate =
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(pickedDate);
+                                        DateFormat('yMd').format(pickedDate);
                                     print(
                                         formattedDate); //formatted date output using intl package =>  2021-03-16
                                     setState(() {
@@ -210,7 +210,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
             margin: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.amber,
+              color: primaryColor,
             ),
             child: Icon(
               icon,

@@ -11,6 +11,8 @@ import 'package:parkeasy/Screens/addVendorScreen.dart';
 import 'package:parkeasy/Screens/allVendorScreen.dart';
 import 'package:parkeasy/Screens/phoneNoScreen.dart';
 import 'package:parkeasy/Screens/priceScreen.dart';
+import 'package:parkeasy/Screens/profileScreen.dart';
+import 'package:parkeasy/Utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,23 +42,38 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        // automaticallyImplyLeading: false,
+        leading: IconButton(
+          color: Colors.black,
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()));
+          },
+          icon: Icon(
+            MdiIcons.accountTieHat,
+            size: 33,
+          ),
+        ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           // Status bar color
-          statusBarColor: Colors.amber,
+
+          statusBarColor: primaryColor,
         ),
-        backgroundColor: Colors.amber,
+        backgroundColor: primaryColor,
         title: const Text(
           "ParkEasy",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
-              letterSpacing: 1.5),
+              letterSpacing: 1),
         ),
         actions: [
           IconButton(
@@ -66,9 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ignore: avoid_types_as_parameter_names
                 builder: (BuildContext) {
                   return Dialog(
+                      // backgroundColor: Colors.amber.shade100,
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(20.0)), //this right here
+                              BorderRadius.circular(50.0)), //this right here
                       child: SizedBox(
                         height: 200,
                         child: Center(
@@ -86,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.amber),
+                                        backgroundColor: primaryColor),
                                     child: const Text("Cancel",
                                         style: TextStyle(color: Colors.black)),
                                     onPressed: () {
@@ -98,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         backgroundColor: Colors.red),
                                     child: const Text(
                                       "Logout",
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
                                       FirebaseAuth.instance.signOut();
@@ -133,50 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
           // mainAxisAlignment: MainAxisAlignment,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // CircleAvatar(
-            //   backgroundColor: Colors.teal,
-            //   backgroundImage: NetworkImage(ap.profilePic),
-            //   radius: 50,
-            // ),
-            // const SizedBox(height: 10),
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 15),
-            //   child: Text(
-            //     // ap.userModel.name,
-            //     'Name: ${ap.userName}',
-            //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // // Text(ap.userModel.dob),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 40),
-            //   child: Text(
-            //     'Email: ${ap.userEmail}',
-            //     style: TextStyle(
-            //         color: Colors.black,
-            //         fontWeight: FontWeight.w600,
-            //         fontSize: 15),
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 2),
-            //   child: Text(
-            //     // ap.userModel.dob,
-            //     ' DOB: ${ap.dateOfBirth}',
-            //     style: TextStyle(
-            //         color: Colors.black,
-            //         fontWeight: FontWeight.w600,
-            //         fontSize: 16),
-            //   ),
-            // ),
-            // CustomButton(text: 'Add Vehicle', onPressed: () {}),
-            // CustomButton(text: 'Add User', onPressed: () {})
-            const Image(
+            Image(
               image: AssetImage('assets/hi.gif'),
-              height: 260,
-              width: 260,
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: MediaQuery.of(context).size.height * 0.3,
             ),
             TextButton(
                 onPressed: () {
@@ -189,8 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 2),
                       borderRadius: BorderRadius.circular(30),
-                      color: Colors.amber),
-                  width: 250,
+                      color: primaryColor),
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: ListTile(
                     leading: Icon(
                       MdiIcons.car,
@@ -210,8 +188,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 2),
                       borderRadius: BorderRadius.circular(30),
-                      color: Colors.amber),
-                  width: 250,
+                      color: primaryColor),
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: ListTile(
                     leading: Icon(
                       MdiIcons.account,
@@ -220,8 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: const Text('Add Vendors'),
                   ),
                 )),
-            const SizedBox(
-              height: 70,
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.2,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -230,17 +208,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        final User? user = _auth.currentUser;
+                        if (user != null) {
+                          final uid = user.uid;
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PriceScreen()));
+                              builder: (context) => PriceScreen(uid),
+                            ),
+                          );
+                        } else {
+                          print('User is not logged in.');
+                        }
                       },
                       child: CircleAvatar(
                         radius: 52,
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors.amber,
+                          backgroundColor: primaryColor,
                           child: Center(
                               child: Icon(
                             MdiIcons.currencyRupee,
@@ -250,11 +236,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.009,
                     ),
                     const AutoSizeText(
-                      'Current Pricing',
+                      'Vehicle Pricing',
                       style: TextStyle(fontSize: 17),
                       maxLines: 1,
                     )
@@ -264,17 +250,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        final User? user = _auth.currentUser;
+                        if (user != null) {
+                          final uid = user.uid;
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const VendorScreen()));
+                              builder: (context) => VendorScreen(uid),
+                            ),
+                          );
+                        } else {
+                          print('User is not logged in.');
+                        }
                       },
                       child: CircleAvatar(
                         radius: 52,
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors.amber,
+                          backgroundColor: primaryColor,
                           child: Center(
                               child: Icon(
                             MdiIcons.account,
@@ -284,8 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.009,
                     ),
                     const AutoSizeText(
                       'Vendors',

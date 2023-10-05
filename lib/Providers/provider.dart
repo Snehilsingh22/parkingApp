@@ -10,6 +10,7 @@ import 'package:parkeasy/Models/usermodel.dart';
 import 'package:parkeasy/Screens/otpScreen.dart';
 import 'package:parkeasy/Utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool _isSignedIn = false;
@@ -112,9 +113,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // DATABASE OPERTAIONS
-  Future<bool> checkExistingUser(String _uid) async {
+  Future<bool> checkExistingUser() async {
     DocumentSnapshot snapshot =
-        await _firebaseFirestore.collection("users").doc(_uid).get();
+        await _firebaseFirestore.collection("users").doc(uid).get();
     if (snapshot.exists) {
       print("USER EXISTS");
       print("checking value is true");
@@ -139,7 +140,8 @@ class AuthProvider extends ChangeNotifier {
       //   userModel.profilePic = value;
       // userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
       userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-      // userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      //  String phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+      // userModel._uid = _firebaseAuth.currentUser!.phoneNumber!;
       // });
       _userModel = userModel;
       // uploading to database
@@ -167,6 +169,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future getDataFromFirestore() async {
+    // DocumentSnapshot ds = await FirebaseFirestore.instance
+    //     .collection("users")
+    //     .doc(_firebaseAuth.currentUser!.uid)
+    //     .get();
+    // _profilePic = ds[''];
+
+    print("testing uid ");
+    print(_firebaseAuth.currentUser!.uid);
     await _firebaseFirestore
         .collection("users")
         .doc(_firebaseAuth.currentUser!.uid)
@@ -182,13 +192,17 @@ class AuthProvider extends ChangeNotifier {
       //   phoneNumber: snapshot['phoneNumber'],
       // );
       //  _uid = userModel.uid;
-      _profilePic = snapshot['profilePic'];
+
       _userName = snapshot['name'];
       _userEmail = snapshot['email'];
       _dob = snapshot['dob'];
 
       notifyListeners();
     });
+
+    print(_userName);
+    print(_userEmail);
+    print(_dob);
   }
 
   // STORING DATA LOCALLY
@@ -211,5 +225,23 @@ class AuthProvider extends ChangeNotifier {
     _isSignedIn = false;
     notifyListeners();
     s.clear();
+  }
+
+  Future<void> setamount(String uid, String vehicle, String amount) async {
+    try {
+      String vehicleId = const Uuid().v1();
+      if (vehicle.isEmpty) {
+        await _firebaseFirestore
+            .collection("users")
+            .doc(uid)
+            .collection("vehicle")
+            .doc(vehicleId)
+            .set({'vehicleName': vehicle, 'amount': amount});
+      } else {
+        print('Text is empty');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

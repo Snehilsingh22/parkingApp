@@ -5,6 +5,7 @@ class UserModel {
 
   // String createdAt;
   String phoneNumber;
+
   //String uid;
 
   UserModel({

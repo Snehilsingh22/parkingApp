@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:parkeasy/Screens/ammountScreen.dart';
+import 'package:parkeasy/Screens/amountScreen.dart';
+import 'package:parkeasy/Screens/homeScreen.dart';
+import 'package:parkeasy/Utils/colors.dart';
 
 class AddVehicleScreen extends StatefulWidget {
   const AddVehicleScreen({super.key});
@@ -103,16 +105,25 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          },
+        ),
         systemOverlayStyle: const SystemUiOverlayStyle(
           // Status bar color
 
-          statusBarColor: Colors.amber,
+          statusBarColor: primaryColor,
         ),
-        backgroundColor: Colors.amber,
+        backgroundColor: primaryColor,
         title: const Text(
           "Add vehicle",
           style: TextStyle(
             color: Colors.black,
+            letterSpacing: 1,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -125,7 +136,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              _handleItemTap(context, imageTitles[index]);
+              _handleItemTap(
+                  context, imageTitles[index], assetImagePaths[index]);
             },
             child: Padding(
               padding: const EdgeInsets.all(5.0),
@@ -136,7 +148,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                   children: [
                     Image.asset(
                         assetImagePaths[index]), // Access image using index
-                    const SizedBox(height: 8.0),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.02,
+                    ),
                     Text(imageTitles[index]), // Access title using index
                   ],
                 ),
@@ -148,12 +162,16 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     );
   }
 
-  void _handleItemTap(BuildContext context, String tappedValue) {
+  void _handleItemTap(
+      BuildContext context, String tappedValue, String tappedimage) {
     // Navigate to a new page and pass the tapped value
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AmmountScreen(tappedValue: tappedValue),
+        builder: (context) => AmmountScreen(
+          tappedValue: tappedValue,
+          tappedImage: tappedimage,
+        ),
       ),
     );
   }

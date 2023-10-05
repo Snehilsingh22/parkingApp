@@ -6,6 +6,7 @@ import 'package:parkeasy/Providers/provider.dart';
 import 'package:parkeasy/Screens/homeScreen.dart';
 import 'package:parkeasy/Screens/phoneNoScreen.dart';
 import 'package:parkeasy/Screens/registerScreen.dart';
+import 'package:parkeasy/Utils/colors.dart';
 import 'package:parkeasy/widgets/custombtn.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
       child: isLoading == true
           ? const Center(
               child: CircularProgressIndicator(
-                color: Colors.amber,
+                color: primaryColor,
               ),
             )
           : Center(
@@ -45,9 +46,11 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: Column(
                   children: [
                     Image(
-                      image: AssetImage('assets/man.gif'),
-                      height: 260,
-                      width: 260,
+                      image: AssetImage(
+                        'assets/man.gif',
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width * 0.7,
                     ),
                     // Align(
                     //   alignment: Alignment.topLeft,
@@ -174,9 +177,9 @@ class _OtpScreenState extends State<OtpScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                                  builder: (context) => const LoginScreen()));
                         },
-                        child: Text(
+                        child: const Text(
                           'Edit Phone Number ?',
                           style: TextStyle(color: Colors.black),
                         ))
@@ -196,7 +199,7 @@ class _OtpScreenState extends State<OtpScreen> {
       onSuccess: () {
         // checking whether user exists in the db
 
-        ap.checkExistingUser(widget.myPhone).then(
+        ap.checkExistingUser().then(
           (value) async {
             if (value == true) {
               Fluttertoast.showToast(
@@ -213,7 +216,7 @@ class _OtpScreenState extends State<OtpScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) => const HomeScreen(),
                   ));
             } else {
               Fluttertoast.showToast(
@@ -229,7 +232,7 @@ class _OtpScreenState extends State<OtpScreen> {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const UserInfromationScreen()),
+                      builder: (context) => UserInfromationScreen()),
                   (route) => false);
             }
           },
